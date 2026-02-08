@@ -1,0 +1,185 @@
+.seller-dashboard {
+    padding: 60px 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.shop-info {
+    text-align: right;
+}
+
+.shop-info h3 {
+    margin: 0;
+    color: var(--accent);
+}
+
+.shop-info span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.dashboard-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-main);
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.dashboard-actions {
+    margin-bottom: 30px;
+}
+
+.listing-form-container {
+    background: var(--bg-surface);
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+}
+
+.listing-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.listing-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.listing-form input,
+.listing-form select,
+.listing-form textarea {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-input);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.listing-form input:focus,
+.listing-form select:focus,
+.listing-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.listing-form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.inventory-section h2,
+.orders-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Badge specific for status */
+.badge.status-placed {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+}
+
+.badge.status-confirmed {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+}
+
+.badge.status-packed {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.badge.status-shipped {
+    background: rgba(184, 146, 37, 0.1);
+    color: var(--accent);
+}
+
+.badge.status-cancelled {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .shop-info {
+        text-align: left;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-tabs {
+        overflow-x: auto;
+    }
+
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+    }
+}

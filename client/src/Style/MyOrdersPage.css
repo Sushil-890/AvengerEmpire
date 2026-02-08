@@ -1,0 +1,87 @@
+.order-history-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+}
+
+.section-header-alt {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: var(--accent);
+    color: var(--text-on-accent);
+    transform: translateX(-3px);
+}
+
+.orders-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+}
+
+.order-id {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.price {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.view-link {
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px solid transparent;
+}
+
+.view-link:hover {
+    border-bottom-color: var(--accent);
+}
+
+/* Specific table adjustments for order history */
+.orders-table th {
+    font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .orders-container {
+        padding: 10px;
+    }
+
+    .orders-table td,
+    .orders-table th {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+}

@@ -1,0 +1,58 @@
+.courier-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.courier-login-card {
+    padding: 40px;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-lg);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border);
+}
+
+.courier-login-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-input);
+    color: var(--text-main);
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.login-submit-btn {
+    width: 100%;
+    margin-top: 10px;
+}

@@ -1,0 +1,106 @@
+.product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+    /* Soft Gold Glow */
+    border-color: var(--accent);
+}
+
+.product-image {
+    position: relative;
+    background: var(--surface);
+    padding-top: 100%;
+    /* 1:1 Aspect Ratio */
+    overflow: hidden;
+}
+
+.product-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--success);
+}
+
+.card-badge.verified {
+    color: var(--success);
+}
+
+.card-badge.category {
+    top: 10px;
+    left: auto;
+    right: 10px;
+    background: rgba(212, 175, 55, 0.9);
+    color: var(--text);
+}
+
+.product-info {
+    padding: 15px 10px;
+}
+
+.brand {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.model {
+    font-size: 1rem;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.colorway {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0 0 10px 0;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+}
+
+.size {
+    font-size: 0.8rem;
+    background: var(--primary);
+    color: var(--text-muted);
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+}
