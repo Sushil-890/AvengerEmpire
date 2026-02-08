@@ -2,30 +2,35 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
-// Get your computer's IP address for physical device testing
-// Replace this with your actual IP address when needed
-const COMPUTER_IP = '192.168.152.220'; // Your current IP address
+// Production API URL - CHANGE THIS to your production backend
+const PRODUCTION_API_URL = 'https://avengerempire.onrender.com';
+
+// Development IP - for local testing
+const COMPUTER_IP = '192.168.89.90';//update it
 
 const getServerUrl = () => {
-    const { manifest } = Constants;
+    // PRODUCTION MODE - use production URL
+    if (!__DEV__) {
+        return PRODUCTION_API_URL;
+    }
     
-    // For Expo development - this will automatically detect your IP
-    if (manifest?.debuggerHost) {
-        const debuggerHost = manifest.debuggerHost.split(':').shift();
+    // DEVELOPMENT MODE - auto-detect local server
+    const { expoConfig } = Constants;
+    
+    if (expoConfig?.hostUri) {
+        const debuggerHost = expoConfig.hostUri.split(':').shift();
         return `http://${debuggerHost}:5000`;
     }
     
-    // For physical devices, use your computer's IP
+    // For physical devices in development
     if (__DEV__) {
         return `http://${COMPUTER_IP}:5000`;
     }
     
     // Fallback based on platform
     if (Platform.OS === 'android') {
-        // For Android emulator
         return 'http://10.0.2.2:5000';
     } else {
-        // For iOS simulator
         return 'http://localhost:5000';
     }
 };
