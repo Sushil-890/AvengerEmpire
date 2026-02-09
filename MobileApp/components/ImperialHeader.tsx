@@ -94,16 +94,10 @@ export function ImperialHeader({
 
           {/* Imperial Banner Section */}
           <View className="mx-4 mb-6 rounded-2xl overflow-hidden">
-            <ImageBackground
-              source={require('@/assets/images/kohinoor_clean_hero_1768133543715.png')}
+            <LinearGradient
+              colors={[colors.neutral.darkGray, colors.neutral.black, colors.neutral.darkGray]}
               className="relative"
-              style={{ minHeight: 280 }}
-              resizeMode="cover">
-              
-              {/* Dark Overlay */}
-              <LinearGradient
-                colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}
-                className="absolute inset-0" />
+              style={{ minHeight: 280 }}>
               
               {/* Content Overlay */}
               <View className="flex-1 justify-center px-6 py-8">
@@ -156,7 +150,7 @@ export function ImperialHeader({
                   </ThemedText>
                 </TouchableOpacity>
               </View>
-            </ImageBackground>
+            </LinearGradient>
           </View>
         </>
       )}

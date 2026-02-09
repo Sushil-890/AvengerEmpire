@@ -38,14 +38,11 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
                 <DrawerContentScrollView {...props} className="flex-1">
                     <View className="flex-1 p-6">
                         {/* Imperial Header */}
-                        <ImageBackground
-                            source={require('@/assets/images/kohinoor_clean_hero_1768133543715.png')}
+                        <LinearGradient
+                            colors={[colors.neutral.darkGray, colors.neutral.black]}
                             className="mb-8 rounded-2xl overflow-hidden"
-                            style={{ minHeight: 200 }}
-                            resizeMode="cover">
-                            <LinearGradient
-                                colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.6)']}
-                                className="flex-1 justify-center items-center p-6">
+                            style={{ minHeight: 200 }}>
+                            <View className="flex-1 justify-center items-center p-6">
                                 <View 
                                     className="w-20 h-20 rounded-full justify-center items-center mb-4 border-2"
                                     style={{ 
@@ -64,8 +61,8 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
                                     style={{ color: colors.neutral.silver }}>
                                     Join the imperial ranks to access{'\n'}exclusive royal privileges
                                 </ThemedText>
-                            </LinearGradient>
-                        </ImageBackground>
+                            </View>
+                        </LinearGradient>
 
                         {/* Imperial Login Button */}
                         <TouchableOpacity
@@ -134,14 +131,11 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
             <DrawerContentScrollView {...props} className="flex-1">
                 <View className="flex-1 p-6">
                     {/* Imperial Profile Header */}
-                    <ImageBackground
-                        source={require('@/assets/images/kohinoor_clean_hero_1768133543715.png')}
+                    <LinearGradient
+                        colors={[colors.neutral.darkGray, colors.neutral.black]}
                         className="mb-8 rounded-2xl overflow-hidden"
-                        style={{ minHeight: 220 }}
-                        resizeMode="cover">
-                        <LinearGradient
-                            colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.6)']}
-                            className="flex-1 justify-center items-center p-6">
+                        style={{ minHeight: 220 }}>
+                        <View className="flex-1 justify-center items-center p-6">
                             <View 
                                 className="w-24 h-24 rounded-full justify-center items-center mb-4 border-2"
                                 style={{ 
@@ -172,8 +166,8 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
                                     {user.role.toUpperCase()} RANK
                                 </ThemedText>
                             </View>
-                        </LinearGradient>
-                    </ImageBackground>
+                        </View>
+                    </LinearGradient>
 
                     {/* Imperial Menu Items */}
                     <View 

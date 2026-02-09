@@ -6,33 +6,11 @@ import Constants from 'expo-constants';
 const PRODUCTION_API_URL = 'https://avengerempire.onrender.com';
 
 // Development IP - for local testing
-const COMPUTER_IP = '192.168.89.90';//update it
+const COMPUTER_IP = '192.168.152.220';//update it
 
 const getServerUrl = () => {
-    // PRODUCTION MODE - use production URL
-    if (!__DEV__) {
-        return PRODUCTION_API_URL;
-    }
-    
-    // DEVELOPMENT MODE - auto-detect local server
-    const { expoConfig } = Constants;
-    
-    if (expoConfig?.hostUri) {
-        const debuggerHost = expoConfig.hostUri.split(':').shift();
-        return `http://${debuggerHost}:5000`;
-    }
-    
-    // For physical devices in development
-    if (__DEV__) {
-        return `http://${COMPUTER_IP}:5000`;
-    }
-    
-    // Fallback based on platform
-    if (Platform.OS === 'android') {
-        return 'http://10.0.2.2:5000';
-    } else {
-        return 'http://localhost:5000';
-    }
+    // Always use production URL for both development and production
+    return PRODUCTION_API_URL;
 };
 
 export const SERVER_URL = getServerUrl();
@@ -43,7 +21,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000, // 10 second timeout
+    timeout: 30000, // 30 second timeout for production server
 });
 
 api.interceptors.request.use(request => {

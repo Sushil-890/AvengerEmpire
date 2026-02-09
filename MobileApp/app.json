@@ -20,13 +20,14 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "package": "com.avengerempire.app",
-      "versionCode": 1,
       "permissions": [
         "INTERNET",
+        "ACCESS_NETWORK_STATE",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "CAMERA"
       ],
+      "usesCleartextTraffic": true,
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -55,8 +56,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "your-project-id-here"
-      }
+        "projectId": "ec48e5b9-b14d-43a3-83e4-71c8a8305262"
+      },
+      "router": {}
     }
   }
 }

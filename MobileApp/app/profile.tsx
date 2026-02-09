@@ -68,14 +68,11 @@ export default function ProfileScreen() {
             style={{ backgroundColor: ImperialColors.neutral.black }}>
             <ScrollView contentContainerStyle={{ padding: 20 }}>
                 {/* Imperial Profile Header */}
-                <ImageBackground
-                    source={require('@/assets/images/kohinoor_clean_hero_1768133543715.png')}
+                <LinearGradient
+                    colors={[ImperialColors.neutral.darkGray, ImperialColors.neutral.black]}
                     className="mb-8 rounded-2xl overflow-hidden"
-                    style={{ minHeight: 240 }}
-                    resizeMode="cover">
-                    <LinearGradient
-                        colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.6)']}
-                        className="flex-1 justify-center items-center p-8">
+                    style={{ minHeight: 240 }}>
+                    <View className="flex-1 justify-center items-center p-8">
                         <View 
                             className="w-28 h-28 rounded-full justify-center items-center mb-4 border-2"
                             style={{ 
@@ -106,8 +103,8 @@ export default function ProfileScreen() {
                                 {user.role.toUpperCase()} RANK
                             </ThemedText>
                         </View>
-                    </LinearGradient>
-                </ImageBackground>
+                    </View>
+                </LinearGradient>
 
                 {/* Imperial Menu Items */}
                 <View 

@@ -12,7 +12,7 @@ const app = express();
 // CORS configuration for separate frontend/backend deployments
 const allowedOrigins = process.env.FRONTEND_URL 
     ? process.env.FRONTEND_URL.split(',')
-    : ['http://localhost:5173', 'http://localhost:3000'];
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:8081'];
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -47,7 +47,9 @@ app.get('/api/test', (req, res) => {
 const authRoutes = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
 const orderRoutes = require('./src/routes/orderRoutes');
-const uploadRoutes = require('./src/routes/uploadRoutes');
+// const uploadRoutes = require('./src/routes/uploadRoutes');
+const uploadRoutes = require('./src/routes/uploadRoutesCloudinary');
+
 const courierRoutes = require('./src/routes/courierRoutes');
 const paymentRoutes = require('./src/routes/paymentRoutes');
 const addressRoutes = require('./src/routes/addressRoutes');
