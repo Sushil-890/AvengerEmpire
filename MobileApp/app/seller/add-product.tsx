@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, TextInput, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import ImagePicker from '@/components/ImagePicker';
@@ -58,7 +59,12 @@ export default function AddProductScreen() {
 
     return (
         <ThemedView style={{ backgroundColor: colors.neutral.black }} className="flex-1">
-            <ScrollView contentContainerStyle={{ padding: 20 }}>
+            <KeyboardAwareScrollView
+                contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+                enableOnAndroid={true}
+                enableAutomaticScroll={true}
+                extraScrollHeight={20}
+                keyboardShouldPersistTaps="handled">
                 <View className="mb-6">
                     <ThemedText 
                         className="text-2xl font-bold mb-2"
@@ -284,7 +290,7 @@ export default function AddProductScreen() {
                         )}
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </ThemedView>
     );
 }

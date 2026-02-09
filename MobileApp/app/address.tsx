@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, TextInput, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, TouchableOpacity, Alert, ActivityIndicator, Platform, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import api from '@/constants/api';
@@ -117,7 +118,12 @@ export default function AddressScreen() {
 
     return (
         <ThemedView className="flex-1" style={{ backgroundColor: colors.neutral.black }}>
-            <ScrollView contentContainerStyle={{ padding: 20 }}>
+            <KeyboardAwareScrollView
+                contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+                enableOnAndroid={true}
+                enableAutomaticScroll={true}
+                extraScrollHeight={20}
+                keyboardShouldPersistTaps="handled">
                 <View className="mb-6">
                     <ThemedText 
                         className="text-2xl font-bold mb-2 tracking-wide"
@@ -345,7 +351,7 @@ export default function AddressScreen() {
                         </TouchableOpacity>
                     )}
                 </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </ThemedView>
     );
 }

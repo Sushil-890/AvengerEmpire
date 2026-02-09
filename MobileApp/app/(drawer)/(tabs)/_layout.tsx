@@ -35,17 +35,6 @@ export default function TabLayout() {
           backgroundColor: currentTheme === 'dark' ? ImperialColors.neutral.black : '#fff',
         },
         headerTintColor: currentTheme === 'dark' ? ImperialColors.neutral.white : '#000',
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => navigation.openDrawer()}
-            className="ml-4 p-2">
-            <MaterialIcons 
-              name="menu" 
-              size={24} 
-              color={currentTheme === 'dark' ? ImperialColors.primary.gold : Colors[colorScheme ?? 'light'].text} 
-            />
-          </TouchableOpacity>
-        ),
         headerRight: () => (
           <View className="flex-row items-center mr-4">
             {/* Cart Icon */}
@@ -115,6 +104,20 @@ export default function TabLayout() {
           title: 'My Orders',
           headerTitle: 'Avenger Empire',
           tabBarIcon: ({ color }) => <MaterialIcons name="shopping-bag" size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          headerTitle: 'Avenger Empire',
+          tabBarIcon: ({ color }) => <MaterialIcons name="person" size={28} color={color} />,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.openDrawer();
+          },
         }}
       />
     </Tabs>

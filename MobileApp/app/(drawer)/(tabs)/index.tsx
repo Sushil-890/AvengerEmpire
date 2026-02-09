@@ -68,64 +68,66 @@ export default function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Hero Banner Section */}
         <View className="relative">
-          <LinearGradient
-            colors={[colors.neutral.darkGray, colors.neutral.black, colors.neutral.darkGray]}
-            style={{ width: width, height: 320 }}>
-            <View className="flex-1">
-              
-              
-
-              {/* Welcome User - Top Right (Lower Position) */}
-              <View className="absolute top-24 right-5 z-10">
-                <View 
-                  className="px-3 py-1.5 rounded-full border"
-                  style={{ 
-                    backgroundColor: 'rgba(10,10,10,0.8)',
-                    borderColor: colors.primary.gold + '40'
-                  }}>
-                  <ThemedText 
-                    className="text-xs tracking-wide text-center"
-                    style={{ color: colors.neutral.silver }}>
-                    Welcome, <ThemedText 
-                      className="text-xs font-bold"
-                      style={{ color: colors.primary.gold }}>
-                      {user?.name || 'Guest'}
+          <ImageBackground
+            source={require('@/assets/images/kohinoor-hero.png')}
+            style={{ width: width, height: 320 }}
+            resizeMode="cover"
+            blurRadius={2}>
+            <LinearGradient
+              colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0.55)', 'rgba(0,0,0,0.8)']}
+              style={{ width: width, height: 320 }}>
+              <View className="flex-1">
+                {/* Welcome User - Top Right (Lower Position) */}
+                <View className="absolute top-24 right-5 z-10">
+                  <View 
+                    className="px-3 py-1.5 rounded-full border"
+                    style={{ 
+                      backgroundColor: 'rgba(10,10,10,0.8)',
+                      borderColor: colors.primary.gold + '40'
+                    }}>
+                    <ThemedText 
+                      className="text-xs tracking-wide text-center"
+                      style={{ color: colors.neutral.silver }}>
+                      Welcome, <ThemedText 
+                        className="text-xs font-bold"
+                        style={{ color: colors.primary.gold }}>
+                        {user?.name || 'Guest'}
+                      </ThemedText>
                     </ThemedText>
+                  </View>
+                </View>
+                
+                {/* Imperial Title - Top */}
+                <View className="px-6 pt-12">
+                  <ThemedText 
+                    className="text-2xl font-bold tracking-wide"
+                    style={{ color: colors.primary.gold }}>
+                    Imperial Style for Royalty
                   </ThemedText>
                 </View>
-              </View>
-              
-              {/* Imperial Title - Top */}
-              <View className="px-6 pt-12">
-                <ThemedText 
-                  className="text-2xl font-bold tracking-wide"
-                  style={{ color: colors.primary.gold }}>
-                  Imperial Style for Royalty
-                </ThemedText>
-              </View>
-              
-
-              {/* Hero Content - Center */}
-              <View className="flex-1 justify-center px-6">
-                <ThemedText 
-                  className="text-sm leading-6 mb-6"
-                  style={{ color: colors.neutral.silver }}>
-                  Discover premium products{'\n'}crafted for excellence
-                </ThemedText>
                 
-                <TouchableOpacity
-                  onPress={() => router.push('/(drawer)/(tabs)/explore')}
-                  className="self-start px-6 py-3 rounded-lg"
-                  style={{ backgroundColor: colors.primary.gold }}>
+                {/* Hero Content - Center */}
+                <View className="flex-1 justify-center px-6">
                   <ThemedText 
-                    className="font-bold tracking-wider"
-                    style={{ color: colors.neutral.black }}>
-                    SHOP NOW
+                    className="text-sm leading-6 mb-6"
+                    style={{ color: colors.neutral.silver }}>
+                    Discover premium products{'\n'}crafted for excellence
                   </ThemedText>
-                </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    onPress={() => router.push('/(drawer)/(tabs)/explore')}
+                    className="self-start px-6 py-3 rounded-lg"
+                    style={{ backgroundColor: colors.primary.gold }}>
+                    <ThemedText 
+                      className="font-bold tracking-wider"
+                      style={{ color: colors.neutral.black }}>
+                      SHOP NOW
+                    </ThemedText>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </LinearGradient>
+            </LinearGradient>
+          </ImageBackground>
         </View>
 
         {/* Categories Section */}

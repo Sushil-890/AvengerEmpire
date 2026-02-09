@@ -38,31 +38,37 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
                 <DrawerContentScrollView {...props} className="flex-1">
                     <View className="flex-1 p-6">
                         {/* Imperial Header */}
-                        <LinearGradient
-                            colors={[colors.neutral.darkGray, colors.neutral.black]}
+                        <ImageBackground
+                            source={require('@/assets/images/kohinoor-hero.png')}
                             className="mb-8 rounded-2xl overflow-hidden"
-                            style={{ minHeight: 200 }}>
-                            <View className="flex-1 justify-center items-center p-6">
-                                <View 
-                                    className="w-20 h-20 rounded-full justify-center items-center mb-4 border-2"
-                                    style={{ 
-                                        backgroundColor: colors.neutral.darkGray,
-                                        borderColor: colors.primary.gold
-                                    }}>
-                                    <MaterialIcons name="person" size={40} color={colors.primary.gold} />
+                            style={{ minHeight: 200 }}
+                            resizeMode="cover"
+                            blurRadius={3}>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.65)']}
+                                className="flex-1">
+                                <View className="flex-1 justify-center items-center p-6">
+                                    <View 
+                                        className="w-20 h-20 rounded-full justify-center items-center mb-4 border-2"
+                                        style={{ 
+                                            backgroundColor: 'rgba(42,42,42,0.8)',
+                                            borderColor: colors.primary.gold
+                                        }}>
+                                        <MaterialIcons name="person" size={40} color={colors.primary.gold} />
+                                    </View>
+                                    <ThemedText 
+                                        className="text-2xl font-bold mb-2 tracking-wider text-center"
+                                        style={{ color: '#FFFFFF' }}>
+                                        WELCOME TO THE{'\n'}EMPIRE
+                                    </ThemedText>
+                                    <ThemedText 
+                                        className="text-center tracking-wide"
+                                        style={{ color: '#E5E5E5' }}>
+                                        Join the imperial ranks to access{'\n'}exclusive royal privileges
+                                    </ThemedText>
                                 </View>
-                                <ThemedText 
-                                    className="text-2xl font-bold mb-2 tracking-wider text-center"
-                                    style={{ color: colors.neutral.white }}>
-                                    WELCOME TO THE{'\n'}EMPIRE
-                                </ThemedText>
-                                <ThemedText 
-                                    className="text-center tracking-wide"
-                                    style={{ color: colors.neutral.silver }}>
-                                    Join the imperial ranks to access{'\n'}exclusive royal privileges
-                                </ThemedText>
-                            </View>
-                        </LinearGradient>
+                            </LinearGradient>
+                        </ImageBackground>
 
                         {/* Imperial Login Button */}
                         <TouchableOpacity
@@ -131,43 +137,51 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
             <DrawerContentScrollView {...props} className="flex-1">
                 <View className="flex-1 p-6">
                     {/* Imperial Profile Header */}
-                    <LinearGradient
-                        colors={[colors.neutral.darkGray, colors.neutral.black]}
+                    <ImageBackground
+                        source={require('@/assets/images/kohinoor-hero.png')}
                         className="mb-8 rounded-2xl overflow-hidden"
-                        style={{ minHeight: 220 }}>
-                        <View className="flex-1 justify-center items-center p-6">
-                            <View 
-                                className="w-24 h-24 rounded-full justify-center items-center mb-4 border-2"
-                                style={{ 
-                                    backgroundColor: colors.neutral.darkGray,
-                                    borderColor: colors.primary.gold
-                                }}>
-                                <MaterialIcons name="person" size={48} color={colors.primary.gold} />
-                            </View>
-                            <ThemedText 
-                                className="text-xl font-bold tracking-wider"
-                                style={{ color: colors.neutral.white }}>
-                                {user.name.toUpperCase()}
-                            </ThemedText>
-                            <ThemedText 
-                                className="mb-3 tracking-wide"
-                                style={{ color: colors.neutral.silver }}>
-                                {user.email}
-                            </ThemedText>
-                            <View 
-                                className="px-4 py-2 rounded-full border"
-                                style={{ 
-                                    backgroundColor: colors.primary.gold + '20',
-                                    borderColor: colors.primary.gold
-                                }}>
+                        style={{ minHeight: 220 }}
+                        resizeMode="cover"
+                        blurRadius={3}>
+                        <LinearGradient
+                            colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.65)']}
+                            className="flex-1">
+                            <View className="flex-1 justify-center items-center p-6">
+                                <View 
+                                    className="w-24 h-24 rounded-full justify-center items-center mb-4 border-2"
+                                    style={{ 
+                                        backgroundColor: 'rgba(42,42,42,0.8)',
+                                        borderColor: colors.primary.gold
+                                    }}>
+                                    <MaterialIcons name="person" size={48} color={colors.primary.gold} />
+                                </View>
                                 <ThemedText 
-                                    className="font-bold text-sm tracking-widest"
-                                    style={{ color: colors.primary.gold }}>
-                                    {user.role.toUpperCase()} RANK
+                                    className="text-xl font-bold tracking-wider"
+                                    style={{ color: '#FFFFFF' }}>
+                                    {user.name.toUpperCase()}
                                 </ThemedText>
+                                <ThemedText 
+                                    className="mb-3 tracking-wide text-xs"
+                                    numberOfLines={1}
+                                    ellipsizeMode="middle"
+                                    style={{ color: '#E5E5E5' }}>
+                                    {user.email}
+                                </ThemedText>
+                                <View 
+                                    className="px-4 py-2 rounded-full border"
+                                    style={{ 
+                                        backgroundColor: colors.primary.gold + '20',
+                                        borderColor: colors.primary.gold
+                                    }}>
+                                    <ThemedText 
+                                        className="font-bold text-sm tracking-widest"
+                                        style={{ color: colors.primary.gold }}>
+                                        {user.role.toUpperCase()} RANK
+                                    </ThemedText>
+                                </View>
                             </View>
-                        </View>
-                    </LinearGradient>
+                        </LinearGradient>
+                    </ImageBackground>
 
                     {/* Imperial Menu Items */}
                     <View 

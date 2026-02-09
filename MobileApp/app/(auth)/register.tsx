@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Alert, ActivityIndicator, Switch } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'expo-router';
@@ -42,13 +43,19 @@ export default function RegisterScreen() {
     };
 
     return (
-        <ThemedView className="flex-1 justify-center px-6">
-            <View className="mb-8">
-                <ThemedText type="title" className="text-3xl font-bold text-center text-red-600 mb-2">Join Empire</ThemedText>
-                <ThemedText className="text-center text-gray-500">Create your account to get started</ThemedText>
-            </View>
+        <ThemedView className="flex-1">
+            <KeyboardAwareScrollView
+                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 24 }}
+                enableOnAndroid={true}
+                enableAutomaticScroll={true}
+                extraScrollHeight={20}
+                keyboardShouldPersistTaps="handled">
+                <View className="mb-8">
+                    <ThemedText type="title" className="text-3xl font-bold text-center text-red-600 mb-2">Join Empire</ThemedText>
+                    <ThemedText className="text-center text-gray-500">Create your account to get started</ThemedText>
+                </View>
 
-            <View className="space-y-4">
+                <View className="space-y-4">
                 <View>
                     <ThemedText className="mb-2 font-medium">Full Name</ThemedText>
                     <TextInput
@@ -142,6 +149,7 @@ export default function RegisterScreen() {
                     </Link>
                 </View>
             </View>
+            </KeyboardAwareScrollView>
         </ThemedView>
     );
 }
