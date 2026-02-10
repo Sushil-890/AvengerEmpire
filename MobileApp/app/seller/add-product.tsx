@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';

@@ -2,8 +2,12 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./src/config/db');
+const validateEnv = require('./src/utils/validateEnv');
 
 dotenv.config();
+
+// Validate environment variables before starting server
+validateEnv();
 
 connectDB();
 
@@ -11,17 +15,30 @@ const app = express();
 
 // CORS configuration for separate frontend/backend deployments
 const allowedOrigins = process.env.FRONTEND_URL 
-    ? process.env.FRONTEND_URL.split(',')
-    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:8081'];
+    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+    : ['http://localhost:5173', 'http://localhost:3000'];
 
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         
+        // In development, allow any localhost or local IP requests for testing
+        if (process.env.NODE_ENV === 'development') {
+            if (origin.includes('localhost') || origin.includes('192.168.') || origin.includes('127.0.0.1')) {
+                return callback(null, true);
+            }
+        }
+        
+        // Check if origin is in allowed list
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
+            // In development, log rejected origins for debugging
+            if (process.env.NODE_ENV !== 'production') {
+                console.warn(`⚠️  CORS: Rejected origin: ${origin}`);
+                console.warn(`   Allowed origins: ${allowedOrigins.join(', ')}`);
+            }
             callback(new Error('Not allowed by CORS'));
         }
     },

@@ -2,14 +2,18 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
-// Production API URL - CHANGE THIS to your production backend
+// Production API URL
 const PRODUCTION_API_URL = 'https://avengerempire.onrender.com';
 
-// Development IP - for local testing
-const COMPUTER_IP = '192.168.152.220';//update it
+// Development IP - for local testing only
+const DEVELOPMENT_IP = '192.168.152.220';
 
 const getServerUrl = () => {
-    // Always use production URL for both development and production
+    // Use production URL by default
+    // Only use local IP in development mode
+    if (__DEV__ && DEVELOPMENT_IP) {
+        return `http://${DEVELOPMENT_IP}:5000`;
+    }
     return PRODUCTION_API_URL;
 };
 
@@ -21,7 +25,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 30000, // 30 second timeout for production server
+    timeout: 30000,
 });
 
 api.interceptors.request.use(request => {
@@ -53,9 +57,11 @@ api.interceptors.response.use(
         
         if (error.code === 'ERR_NETWORK') {
             console.log('🔍 Network Error Details:');
-            console.log('- Check if server is running on port 5000');
+            console.log('- Check if server is running');
             console.log('- Current server URL:', SERVER_URL);
-            console.log('- If using physical device, make sure both devices are on same WiFi');
+            if (__DEV__) {
+                console.log('- If using local development, check IP address and port');
+            }
         }
         
         return Promise.reject(error);

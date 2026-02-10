@@ -77,6 +77,11 @@ router.get('/:orderId', async (req, res) => {
             return res.status(404).send('Order not found');
         }
 
+        // Determine redirect URL based on client type (from query param or user agent)
+        const clientType = req.query.client || 'web'; // 'web' or 'mobile'
+        const mobileScheme = process.env.MOBILE_APP_SCHEME || 'avengerempire://';
+        const webUrl = process.env.WEB_APP_URL || 'http://localhost:5173';
+
         // Create Razorpay order
         const razorpayOrder = await razorpay.orders.create({
             amount: order.totalPrice * 100, // amount in smallest currency unit
@@ -156,6 +161,10 @@ router.get('/:orderId', async (req, res) => {
                 .pay-button:hover {
                     background: #b91c1c;
                 }
+                .pay-button:disabled {
+                    background: #9ca3af;
+                    cursor: not-allowed;
+                }
                 .loading {
                     display: none;
                     color: #666;
@@ -165,11 +174,27 @@ router.get('/:orderId', async (req, res) => {
                     display: none;
                     color: #059669;
                     margin-top: 20px;
+                    font-weight: 600;
                 }
                 .error {
                     display: none;
                     color: #dc2626;
                     margin-top: 20px;
+                }
+                .close-button {
+                    display: none;
+                    background: #059669;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    margin-top: 15px;
+                }
+                .close-button:hover {
+                    background: #047857;
                 }
             </style>
         </head>
@@ -193,18 +218,31 @@ router.get('/:orderId', async (req, res) => {
                     </div>
                 </div>
 
-                <button class="pay-button" onclick="startPayment()">
+                <button class="pay-button" id="payButton" onclick="startPayment()">
                     Pay ₹${order.totalPrice}
                 </button>
                 
                 <div class="loading" id="loading">Processing payment...</div>
-                <div class="success" id="success">Payment successful! Redirecting...</div>
+                <div class="success" id="success">
+                    Payment successful! 
+                    <div id="redirectMessage"></div>
+                </div>
+                <button class="close-button" id="closeButton" onclick="window.close()">
+                    Close Window
+                </button>
                 <div class="error" id="error">Payment failed. Please try again.</div>
             </div>
 
             <script>
+                const CLIENT_TYPE = '${clientType}';
+                const MOBILE_SCHEME = '${mobileScheme}';
+                const WEB_URL = '${webUrl}';
+                const ORDER_ID = '${order._id}';
+
                 function startPayment() {
-                    document.querySelector('.pay-button').style.display = 'none';
+                    const payButton = document.getElementById('payButton');
+                    payButton.disabled = true;
+                    payButton.style.display = 'none';
                     document.getElementById('loading').style.display = 'block';
 
                     var options = {
@@ -229,26 +267,25 @@ router.get('/:orderId', async (req, res) => {
                                     razorpay_order_id: response.razorpay_order_id,
                                     razorpay_payment_id: response.razorpay_payment_id,
                                     razorpay_signature: response.razorpay_signature,
-                                    orderId: "${order._id}"
+                                    orderId: ORDER_ID
                                 })
                             }).then(res => res.json()).then(data => {
                                 if (data.success) {
-                                    // Redirect back to mobile app
-                                    setTimeout(() => {
-                                        window.location.href = 'exp://192.168.1.27:8081/--/orders/${order._id}?payment=success';
-                                    }, 2000);
+                                    handleSuccessRedirect();
                                 }
                             }).catch(err => {
                                 console.error('Verification error:', err);
                                 document.getElementById('success').style.display = 'none';
                                 document.getElementById('error').style.display = 'block';
-                                document.querySelector('.pay-button').style.display = 'block';
+                                payButton.disabled = false;
+                                payButton.style.display = 'block';
                             });
                         },
                         "modal": {
                             "ondismiss": function() {
                                 document.getElementById('loading').style.display = 'none';
-                                document.querySelector('.pay-button').style.display = 'block';
+                                payButton.disabled = false;
+                                payButton.style.display = 'block';
                             }
                         },
                         "theme": {
@@ -258,6 +295,32 @@ router.get('/:orderId', async (req, res) => {
                     
                     var rzp = new Razorpay(options);
                     rzp.open();
+                }
+
+                function handleSuccessRedirect() {
+                    if (CLIENT_TYPE === 'mobile') {
+                        // Mobile app redirect
+                        const mobileUrl = MOBILE_SCHEME + 'orders/' + ORDER_ID + '?payment=success';
+                        document.getElementById('redirectMessage').innerHTML = 
+                            'Redirecting to app...<br><small>If not redirected, you can close this window.</small>';
+                        
+                        setTimeout(() => {
+                            window.location.href = mobileUrl;
+                            
+                            // Show close button after redirect attempt
+                            setTimeout(() => {
+                                document.getElementById('redirectMessage').innerHTML = 
+                                    'You can now close this window and return to the app.';
+                                document.getElementById('closeButton').style.display = 'inline-block';
+                            }, 2000);
+                        }, 1000);
+                    } else {
+                        // Web redirect
+                        document.getElementById('redirectMessage').innerHTML = 'Redirecting to orders page...';
+                        setTimeout(() => {
+                            window.location.href = WEB_URL + '/orders/' + ORDER_ID;
+                        }, 1500);
+                    }
                 }
             </script>
         </body>

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "test:env": "node test-env.js",
     "data:import": "node seeder.js",
     "data:destroy": "node seeder.js -d"
   },

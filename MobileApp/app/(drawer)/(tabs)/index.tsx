@@ -68,14 +68,10 @@ export default function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Hero Banner Section */}
         <View className="relative">
-          <ImageBackground
-            source={require('@/assets/images/kohinoor-hero.png')}
-            style={{ width: width, height: 320 }}
-            resizeMode="cover"
-            blurRadius={2}>
-            <LinearGradient
-              colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0.55)', 'rgba(0,0,0,0.8)']}
-              style={{ width: width, height: 320 }}>
+          <LinearGradient
+            colors={[colors.neutral.darkGray, colors.neutral.black, colors.neutral.darkGray]}
+            style={{ width: width, height: 320 }}>
+            <View className="flex-1">
               <View className="flex-1">
                 {/* Welcome User - Top Right (Lower Position) */}
                 <View className="absolute top-24 right-5 z-10">
@@ -126,8 +122,8 @@ export default function HomeScreen() {
                   </TouchableOpacity>
                 </View>
               </View>
-            </LinearGradient>
-          </ImageBackground>
+            </View>
+          </LinearGradient>
         </View>
 
         {/* Categories Section */}

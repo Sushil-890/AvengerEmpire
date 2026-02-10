@@ -3,7 +3,8 @@ import { View, TouchableOpacity, Alert, ActivityIndicator, Keyboard } from 'reac
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -32,6 +33,14 @@ export default function PaymentScreen() {
         return () => subscription?.remove();
     }, []);
 
+    // Check payment status when screen comes into focus (when user returns from browser)
+    useFocusEffect(
+        useCallback(() => {
+            console.log('🔄 Payment screen focused - checking payment status...');
+            checkPaymentStatus();
+        }, [orderId])
+    );
+
     const handleDeepLink = (event: { url: string }) => {
         const url = event.url;
         if (url.includes('payment=success')) {
@@ -51,6 +60,41 @@ export default function PaymentScreen() {
         }
     };
 
+    const checkPaymentStatus = async () => {
+        try {
+            console.log('🔍 Checking payment status for order:', orderId);
+            const response = await api.get(`/orders/${orderId}`);
+            console.log('📋 Order status:', {
+                isPaid: response.data.isPaid,
+                paymentMethod: response.data.paymentMethod,
+                status: response.data.status
+            });
+            
+            if (response.data.isPaid) {
+                // Payment was successful
+                console.log('✅ Payment confirmed! Clearing cart and redirecting...');
+                clearCart();
+                Alert.alert(
+                    'Payment Successful!',
+                    'Your payment has been processed and order confirmed.',
+                    [
+                        { 
+                            text: 'View Orders', 
+                            onPress: () => {
+                                router.replace('/(drawer)/(tabs)/orders');
+                            }
+                        }
+                    ]
+                );
+            } else {
+                console.log('⏳ Payment still pending...');
+            }
+        } catch (error) {
+            console.log('❌ Error checking payment status:', error);
+            Alert.alert('Error', 'Could not check payment status. Please try again.');
+        }
+    };
+
     const handlePayment = async () => {
         // Double check auth before payment
         if (!requireAuth(undefined, 'Please login to complete your payment')) {
@@ -62,8 +106,8 @@ export default function PaymentScreen() {
         
         try {
             if (paymentMethod === 'razorpay') {
-                // Open Razorpay payment page in browser
-                const paymentUrl = `${SERVER_URL}/api/payment/${orderId}`;
+                // Open Razorpay payment page in browser with client type
+                const paymentUrl = `${SERVER_URL}/api/payment/${orderId}?client=mobile`;
                 
                 const result = await WebBrowser.openBrowserAsync(paymentUrl, {
                     presentationStyle: WebBrowser.WebBrowserPresentationStyle.FORM_SHEET,
@@ -218,7 +262,7 @@ export default function PaymentScreen() {
                 <TouchableOpacity
                     onPress={handlePayment}
                     disabled={loading}
-                    className="bg-red-600 py-4 rounded-xl flex-row justify-center items-center">
+                    className="bg-red-600 py-4 rounded-xl flex-row justify-center items-center mb-3">
                     {loading ? (
                         <ActivityIndicator color="white" />
                     ) : (
@@ -235,6 +279,23 @@ export default function PaymentScreen() {
                         </>
                     )}
                 </TouchableOpacity>
+                
+                {paymentMethod === 'razorpay' && (
+                    <TouchableOpacity
+                        onPress={checkPaymentStatus}
+                        disabled={loading}
+                        className="py-3 rounded-xl flex-row justify-center items-center border border-gray-300 dark:border-zinc-700">
+                        <MaterialIcons 
+                            name="refresh" 
+                            size={20} 
+                            color="#6B7280" 
+                            style={{ marginRight: 8 }} 
+                        />
+                        <ThemedText className="text-gray-600 dark:text-gray-400 font-medium">
+                            Check Payment Status
+                        </ThemedText>
+                    </TouchableOpacity>
+                )}
             </View>
         </ThemedView>
     );
