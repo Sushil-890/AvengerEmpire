@@ -279,10 +279,18 @@ router.get('/:orderId', async (req, res) => {
                         "order_id": "${razorpayOrder.id}",
                         "handler": function (response) {
                             // Payment successful
+                            console.log('🎉 Razorpay payment successful:', response);
                             document.getElementById('loading').style.display = 'none';
                             document.getElementById('success').style.display = 'block';
                             
                             // Verify payment on server
+                            console.log('🔄 Starting payment verification...');
+                            console.log('📋 Verification data:', {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                orderId: ORDER_ID
+                            });
+                            
                             fetch('/api/payment/verify', {
                                 method: 'POST',
                                 headers: {
@@ -294,7 +302,13 @@ router.get('/:orderId', async (req, res) => {
                                     razorpay_signature: response.razorpay_signature,
                                     orderId: ORDER_ID
                                 })
-                            }).then(res => res.json()).then(data => {
+                            }).then(res => {
+                                console.log('📡 Verification response status:', res.status);
+                                if (!res.ok) {
+                                    throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+                                }
+                                return res.json();
+                            }).then(data => {
                                 console.log('💳 Payment verification response:', data);
                                 if (data.success) {
                                     console.log('✅ Payment verified successfully');
@@ -310,7 +324,8 @@ router.get('/:orderId', async (req, res) => {
                                     payButton.style.display = 'block';
                                 }
                             }).catch(err => {
-                                console.error('Verification error:', err);
+                                console.error('❌ Payment verification error:', err);
+                                console.error('Error details:', err.message);
                                 document.getElementById('success').style.display = 'none';
                                 document.getElementById('error').style.display = 'block';
                                 payButton.disabled = false;
