@@ -82,6 +82,13 @@ router.get('/:orderId', async (req, res) => {
         const mobileScheme = process.env.MOBILE_APP_SCHEME || 'avengerempire://';
         const webUrl = process.env.WEB_APP_URL || 'http://localhost:5173';
 
+        // Debug logging
+        console.log('🔍 Payment page variables:');
+        console.log('  clientType:', clientType);
+        console.log('  mobileScheme:', mobileScheme);
+        console.log('  webUrl:', webUrl);
+        console.log('  orderId:', req.params.orderId);
+
         // Create Razorpay order
         const razorpayOrder = await razorpay.orders.create({
             amount: order.totalPrice * 100, // amount in smallest currency unit
@@ -239,6 +246,12 @@ router.get('/:orderId', async (req, res) => {
                 const WEB_URL = '${webUrl}';
                 const ORDER_ID = '${order._id}';
 
+                console.log('🔍 Browser JavaScript variables:');
+                console.log('  CLIENT_TYPE:', CLIENT_TYPE);
+                console.log('  MOBILE_SCHEME:', MOBILE_SCHEME);
+                console.log('  WEB_URL:', WEB_URL);
+                console.log('  ORDER_ID:', ORDER_ID);
+
                 function startPayment() {
                     const payButton = document.getElementById('payButton');
                     payButton.disabled = true;
@@ -299,13 +312,18 @@ router.get('/:orderId', async (req, res) => {
 
                 function handleSuccessRedirect() {
                     if (CLIENT_TYPE === 'mobile') {
-                        // Mobile app redirect
+                        // Mobile app redirect - use the correct route structure
                         const mobileUrl = MOBILE_SCHEME + 'orders/' + ORDER_ID + '?payment=success';
+                        console.log('Redirecting to:', mobileUrl);
                         document.getElementById('redirectMessage').innerHTML = 
                             'Redirecting to app...<br><small>If not redirected, you can close this window.</small>';
                         
                         setTimeout(() => {
-                            window.location.href = mobileUrl;
+                            try {
+                                window.location.href = mobileUrl;
+                            } catch (error) {
+                                console.error('Redirect failed:', error);
+                            }
                             
                             // Show close button after redirect attempt
                             setTimeout(() => {
