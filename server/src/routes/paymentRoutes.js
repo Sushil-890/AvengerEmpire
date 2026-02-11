@@ -18,6 +18,10 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
 router.post('/verify', async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
 
+    console.log('🔍 Payment verification request:');
+    console.log('  orderId:', orderId);
+    console.log('  razorpay_payment_id:', razorpay_payment_id);
+
     try {
         const body = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -27,9 +31,13 @@ router.post('/verify', async (req, res) => {
             .digest("hex");
 
         if (expectedSignature === razorpay_signature) {
+            console.log('✅ Payment signature verified');
+            
             // Payment is legit, update the order
             const order = await Order.findById(orderId);
             if (order) {
+                console.log('📋 Order found, updating payment status...');
+                
                 order.isPaid = true;
                 order.paidAt = Date.now();
                 order.paymentResult = {
@@ -46,15 +54,19 @@ router.post('/verify', async (req, res) => {
                 });
 
                 await order.save();
+                console.log('✅ Order payment status updated successfully');
+                
                 res.json({ 
                     message: "Payment Verified", 
                     success: true
                 });
             } else {
+                console.error('❌ Order not found:', orderId);
                 res.status(404);
                 throw new Error('Order not found regarding this payment');
             }
         } else {
+            console.error('❌ Invalid payment signature');
             res.status(400);
             throw new Error('Invalid signature');
         }
@@ -283,8 +295,19 @@ router.get('/:orderId', async (req, res) => {
                                     orderId: ORDER_ID
                                 })
                             }).then(res => res.json()).then(data => {
+                                console.log('💳 Payment verification response:', data);
                                 if (data.success) {
-                                    handleSuccessRedirect();
+                                    console.log('✅ Payment verified successfully');
+                                    // Wait a bit longer before redirect to ensure database is updated
+                                    setTimeout(() => {
+                                        handleSuccessRedirect();
+                                    }, 1500); // Increased delay
+                                } else {
+                                    console.error('❌ Payment verification failed:', data);
+                                    document.getElementById('success').style.display = 'none';
+                                    document.getElementById('error').style.display = 'block';
+                                    payButton.disabled = false;
+                                    payButton.style.display = 'block';
                                 }
                             }).catch(err => {
                                 console.error('Verification error:', err);
