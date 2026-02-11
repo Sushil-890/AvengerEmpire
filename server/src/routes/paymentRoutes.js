@@ -32,12 +32,12 @@ router.post('/verify', async (req, res) => {
 
         if (expectedSignature === razorpay_signature) {
             console.log('✅ Payment signature verified');
-            
+
             // Payment is legit, update the order
             const order = await Order.findById(orderId);
             if (order) {
                 console.log('📋 Order found, updating payment status...');
-                
+
                 order.isPaid = true;
                 order.paidAt = Date.now();
                 order.paymentResult = {
@@ -55,9 +55,9 @@ router.post('/verify', async (req, res) => {
 
                 await order.save();
                 console.log('✅ Order payment status updated successfully');
-                
-                res.json({ 
-                    message: "Payment Verified", 
+
+                res.json({
+                    message: "Payment Verified",
                     success: true
                 });
             } else {
@@ -72,9 +72,9 @@ router.post('/verify', async (req, res) => {
         }
     } catch (error) {
         console.error('Payment verification error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             message: error.message || 'Payment verification failed',
-            success: false 
+            success: false
         });
     }
 });
@@ -350,26 +350,44 @@ router.get('/:orderId', async (req, res) => {
 
                 function handleSuccessRedirect() {
                     if (CLIENT_TYPE === 'mobile') {
-                        // Mobile app redirect - use the correct route structure
+                        // Mobile app redirect - use multiple strategies for reliability
                         const mobileUrl = MOBILE_SCHEME + 'orders/' + ORDER_ID + '?payment=success';
-                        console.log('Redirecting to:', mobileUrl);
+                        console.log('🚀 Attempting mobile redirect to:', mobileUrl);
                         document.getElementById('redirectMessage').innerHTML = 
-                            'Redirecting to app...<br><small>If not redirected, you can close this window.</small>';
+                            'Redirecting to app...<br><small>Please wait...</small>';
                         
+                        // Strategy 1: Create hidden iframe (works best in WebBrowser)
+                        const iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.src = mobileUrl;
+                        document.body.appendChild(iframe);
+                        console.log('✅ Created iframe redirect');
+                        
+                        // Strategy 2: Add meta refresh tag
+                        const meta = document.createElement('meta');
+                        meta.httpEquiv = 'refresh';
+                        meta.content = '1;url=' + mobileUrl;
+                        document.head.appendChild(meta);
+                        console.log('✅ Added meta refresh');
+                        
+                        // Strategy 3: Try window.location after brief delay
                         setTimeout(() => {
                             try {
+                                console.log('✅ Attempting window.location redirect');
                                 window.location.href = mobileUrl;
+                                // Also try replace as alternative
+                                window.location.replace(mobileUrl);
                             } catch (error) {
-                                console.error('Redirect failed:', error);
+                                console.error('❌ window.location redirect failed:', error);
                             }
-                            
-                            // Show close button after redirect attempt
-                            setTimeout(() => {
-                                document.getElementById('redirectMessage').innerHTML = 
-                                    'You can now close this window and return to the app.';
-                                document.getElementById('closeButton').style.display = 'inline-block';
-                            }, 2000);
-                        }, 1000);
+                        }, 500);
+                        
+                        // Strategy 4: Create a clickable link as ultimate fallback
+                        setTimeout(() => {
+                            document.getElementById('redirectMessage').innerHTML = 
+                                'If not redirected automatically, <a href="' + mobileUrl + '" style="color: #DC2626; font-weight: bold; text-decoration: underline;">tap here to open app</a>';
+                            document.getElementById('closeButton').style.display = 'inline-block';
+                        }, 3000);
                     } else {
                         // Web redirect
                         document.getElementById('redirectMessage').innerHTML = 'Redirecting to orders page...';
