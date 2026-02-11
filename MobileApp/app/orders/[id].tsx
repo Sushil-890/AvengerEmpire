@@ -8,14 +8,20 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TouchableOpacity } from 'react-native';
 
 export default function OrderDetailsScreen() {
-    const { id } = useLocalSearchParams();
+    const { id, payment } = useLocalSearchParams();
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         fetchOrderDetails();
-    }, [id]);
+        
+        // Handle payment success parameter
+        if (payment === 'success') {
+            // Show success message or handle payment success
+            console.log('Payment successful for order:', id);
+        }
+    }, [id, payment]);
 
     const fetchOrderDetails = async () => {
         try {

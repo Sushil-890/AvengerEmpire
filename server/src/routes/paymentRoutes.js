@@ -11,7 +11,7 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
         key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 }
-
+//
 // @desc    Verify Razorpay Payment (Public endpoint for browser payments)
 // @route   POST /api/payment/verify
 // @access  Public
@@ -302,6 +302,7 @@ router.get('/:orderId', async (req, res) => {
                                     razorpay_signature: response.razorpay_signature,
                                     orderId: ORDER_ID
                                 })
+
                             }).then(res => {
                                 console.log('📡 Verification response status:', res.status);
                                 if (!res.ok) {
