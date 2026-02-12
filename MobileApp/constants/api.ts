@@ -6,14 +6,14 @@ import Constants from 'expo-constants';
 const PRODUCTION_API_URL = 'https://avengerempire.onrender.com';
 
 // Development IP - for local testing only
-const DEVELOPMENT_IP = '192.168.152.220';
+// const DEVELOPMENT_IP = '192.168.152.220';
 
 const getServerUrl = () => {
     // Use production URL by default
     // Only use local IP in development mode
-    if (__DEV__ && DEVELOPMENT_IP) {
-        return `http://${DEVELOPMENT_IP}:5000`;
-    }
+    // if (__DEV__ && DEVELOPMENT_IP) {
+    //     return `http://${DEVELOPMENT_IP}:5000`;
+    // }
     return PRODUCTION_API_URL;
 };
 
@@ -45,7 +45,7 @@ api.interceptors.response.use(
             url: response.config.url
         });
         return response;
-    }, 
+    },
     error => {
         console.log('❌ API Error:', {
             message: error.message,
@@ -54,7 +54,7 @@ api.interceptors.response.use(
             url: error.config?.url,
             baseURL: error.config?.baseURL
         });
-        
+
         if (error.code === 'ERR_NETWORK') {
             console.log('🔍 Network Error Details:');
             console.log('- Check if server is running');
@@ -63,7 +63,7 @@ api.interceptors.response.use(
                 console.log('- If using local development, check IP address and port');
             }
         }
-        
+
         return Promise.reject(error);
     }
 );

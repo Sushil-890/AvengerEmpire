@@ -12,6 +12,8 @@ import api, { SERVER_URL } from '@/constants/api';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useAuthNavigation } from '@/hooks/useAuthNavigation';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ImperialColors, LightColors } from '@/constants/theme';
 
 export default function PaymentScreen() {
     const { orderId, amount } = useLocalSearchParams();
@@ -21,6 +23,8 @@ export default function PaymentScreen() {
     const { clearCart } = useCart();
     const { user } = useAuth();
     const { requireAuth } = useAuthNavigation();
+    const colorScheme = useColorScheme();
+    const colors = colorScheme === 'dark' ? ImperialColors : LightColors;
 
     useEffect(() => {
         // Check if user is authenticated when component mounts
@@ -175,80 +179,124 @@ export default function PaymentScreen() {
     }
 
     return (
-        <ThemedView className="flex-1">
+        <ThemedView className="flex-1" style={{ backgroundColor: colors.neutral.black }}>
             <KeyboardAwareScrollView 
                 contentContainerStyle={{ padding: 20 }}
                 enableOnAndroid={true}
                 keyboardShouldPersistTaps="handled"
                 extraScrollHeight={20}
             >
-                <ThemedText type="title" className="mb-6">Payment</ThemedText>
+                <ThemedText type="title" className="mb-6" style={{ color: colors.neutral.white }}>
+                    Avenger Empire
+                </ThemedText>
 
                 {/* Order Details */}
-                <View className="bg-white dark:bg-zinc-800 p-4 rounded-xl mb-6 border border-gray-100 dark:border-zinc-700">
-                    <ThemedText type="subtitle" className="mb-2">Order Details</ThemedText>
+                <View 
+                    className="p-4 rounded-xl mb-6 border" 
+                    style={{ 
+                        backgroundColor: colors.neutral.darkGray,
+                        borderColor: colors.neutral.lightGray
+                    }}>
+                    <ThemedText type="subtitle" className="mb-2" style={{ color: colors.neutral.white }}>
+                        Order Details
+                    </ThemedText>
                     <View className="flex-row justify-between">
-                        <ThemedText className="text-gray-500">Order ID:</ThemedText>
-                        <ThemedText className="font-mono text-sm">#{String(orderId).substring(0, 8)}</ThemedText>
+                        <ThemedText style={{ color: colors.neutral.silver }}>Order ID:</ThemedText>
+                        <ThemedText className="font-mono text-sm" style={{ color: colors.neutral.white }}>
+                            #{String(orderId).substring(0, 8)}
+                        </ThemedText>
                     </View>
                     <View className="flex-row justify-between mt-2">
-                        <ThemedText className="text-gray-500">Amount:</ThemedText>
-                        <ThemedText className="font-bold text-emerald-600 text-xl">₹{amount}</ThemedText>
+                        <ThemedText style={{ color: colors.neutral.silver }}>Amount:</ThemedText>
+                        <ThemedText className="font-bold text-xl" style={{ color: colors.primary.gold }}>
+                            ₹{amount}
+                        </ThemedText>
                     </View>
                 </View>
 
                 {/* Payment Methods */}
                 <View className="mb-6">
-                    <ThemedText type="subtitle" className="mb-4">Payment Method</ThemedText>
+                    <ThemedText type="subtitle" className="mb-4" style={{ color: colors.neutral.white }}>
+                        Payment Method
+                    </ThemedText>
                     
                     <TouchableOpacity
                         onPress={() => setPaymentMethod('razorpay')}
-                        className={`flex-row items-center p-4 rounded-xl border mb-3 ${
-                            paymentMethod === 'razorpay' 
-                                ? 'border-red-600 bg-red-50 dark:bg-red-900/20' 
-                                : 'border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800'
-                        }`}>
-                        <View className="w-12 h-12 bg-blue-100 rounded-lg justify-center items-center mr-4">
+                        className="flex-row items-center p-4 rounded-xl border mb-3"
+                        style={{ 
+                            backgroundColor: paymentMethod === 'razorpay' 
+                                ? (colorScheme === 'dark' ? 'rgba(139, 0, 0, 0.2)' : '#FEE2E2')
+                                : colors.neutral.darkGray,
+                            borderColor: paymentMethod === 'razorpay' 
+                                ? colors.secondary.crimson 
+                                : colors.neutral.lightGray
+                        }}>
+                        <View 
+                            className="w-12 h-12 rounded-lg justify-center items-center mr-4"
+                            style={{ backgroundColor: colorScheme === 'dark' ? '#1E3A8A' : '#DBEAFE' }}>
                             <MaterialIcons name="payment" size={24} color="#2563EB" />
                         </View>
                         <View className="flex-1">
-                            <ThemedText className="font-semibold">Razorpay</ThemedText>
-                            <ThemedText className="text-gray-500 text-sm">Credit/Debit Card, UPI, Net Banking</ThemedText>
+                            <ThemedText className="font-semibold" style={{ color: colors.neutral.white }}>
+                                Razorpay
+                            </ThemedText>
+                            <ThemedText className="text-sm" style={{ color: colors.neutral.silver }}>
+                                Credit/Debit Card, UPI, Net Banking
+                            </ThemedText>
                         </View>
                         {paymentMethod === 'razorpay' && (
-                            <MaterialIcons name="check-circle" size={24} color="#DC2626" />
+                            <MaterialIcons name="check-circle" size={24} color={colors.secondary.crimson} />
                         )}
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={() => setPaymentMethod('cod')}
-                        className={`flex-row items-center p-4 rounded-xl border ${
-                            paymentMethod === 'cod' 
-                                ? 'border-red-600 bg-red-50 dark:bg-red-900/20' 
-                                : 'border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800'
-                        }`}>
-                        <View className="w-12 h-12 bg-green-100 rounded-lg justify-center items-center mr-4">
+                        className="flex-row items-center p-4 rounded-xl border"
+                        style={{ 
+                            backgroundColor: paymentMethod === 'cod' 
+                                ? (colorScheme === 'dark' ? 'rgba(139, 0, 0, 0.2)' : '#FEE2E2')
+                                : colors.neutral.darkGray,
+                            borderColor: paymentMethod === 'cod' 
+                                ? colors.secondary.crimson 
+                                : colors.neutral.lightGray
+                        }}>
+                        <View 
+                            className="w-12 h-12 rounded-lg justify-center items-center mr-4"
+                            style={{ backgroundColor: colorScheme === 'dark' ? '#065F46' : '#D1FAE5' }}>
                             <MaterialIcons name="local-shipping" size={24} color="#059669" />
                         </View>
                         <View className="flex-1">
-                            <ThemedText className="font-semibold">Cash on Delivery</ThemedText>
-                            <ThemedText className="text-gray-500 text-sm">Pay when you receive the order</ThemedText>
+                            <ThemedText className="font-semibold" style={{ color: colors.neutral.white }}>
+                                Cash on Delivery
+                            </ThemedText>
+                            <ThemedText className="text-sm" style={{ color: colors.neutral.silver }}>
+                                Pay when you receive the order
+                            </ThemedText>
                         </View>
                         {paymentMethod === 'cod' && (
-                            <MaterialIcons name="check-circle" size={24} color="#DC2626" />
+                            <MaterialIcons name="check-circle" size={24} color={colors.secondary.crimson} />
                         )}
                     </TouchableOpacity>
                 </View>
 
                 {/* Payment Info */}
-                <View className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                <View 
+                    className="p-4 rounded-xl border" 
+                    style={{ 
+                        backgroundColor: colorScheme === 'dark' ? 'rgba(37, 99, 235, 0.1)' : '#EFF6FF',
+                        borderColor: colorScheme === 'dark' ? 'rgba(37, 99, 235, 0.3)' : '#BFDBFE'
+                    }}>
                     <View className="flex-row items-center mb-2">
                         <MaterialIcons name="security" size={20} color="#2563EB" />
-                        <ThemedText className="font-semibold ml-2 text-blue-700 dark:text-blue-300">
+                        <ThemedText 
+                            className="font-semibold ml-2" 
+                            style={{ color: colorScheme === 'dark' ? '#93C5FD' : '#1E40AF' }}>
                             {paymentMethod === 'razorpay' ? 'Secure Payment Gateway' : 'Cash on Delivery'}
                         </ThemedText>
                     </View>
-                    <ThemedText className="text-blue-600 dark:text-blue-400 text-sm">
+                    <ThemedText 
+                        className="text-sm" 
+                        style={{ color: colorScheme === 'dark' ? '#60A5FA' : '#2563EB' }}>
                         {paymentMethod === 'razorpay' 
                             ? 'You will be redirected to Razorpay\'s secure payment gateway to complete your payment.'
                             : 'Pay in cash when your order is delivered to your doorstep.'
@@ -258,11 +306,17 @@ export default function PaymentScreen() {
             </KeyboardAwareScrollView>
 
             {/* Payment Button */}
-            <View className="p-4 bg-white dark:bg-black border-t border-gray-100 dark:border-zinc-800">
+            <View 
+                className="p-4 border-t" 
+                style={{ 
+                    backgroundColor: colors.neutral.darkGray,
+                    borderTopColor: colors.neutral.lightGray
+                }}>
                 <TouchableOpacity
                     onPress={handlePayment}
                     disabled={loading}
-                    className="bg-red-600 py-4 rounded-xl flex-row justify-center items-center mb-3">
+                    className="py-4 rounded-xl flex-row justify-center items-center"
+                    style={{ backgroundColor: colors.secondary.crimson }}>
                     {loading ? (
                         <ActivityIndicator color="white" />
                     ) : (
@@ -279,23 +333,6 @@ export default function PaymentScreen() {
                         </>
                     )}
                 </TouchableOpacity>
-                
-                {paymentMethod === 'razorpay' && (
-                    <TouchableOpacity
-                        onPress={checkPaymentStatus}
-                        disabled={loading}
-                        className="py-3 rounded-xl flex-row justify-center items-center border border-gray-300 dark:border-zinc-700">
-                        <MaterialIcons 
-                            name="refresh" 
-                            size={20} 
-                            color="#6B7280" 
-                            style={{ marginRight: 8 }} 
-                        />
-                        <ThemedText className="text-gray-600 dark:text-gray-400 font-medium">
-                            Check Payment Status
-                        </ThemedText>
-                    </TouchableOpacity>
-                )}
             </View>
         </ThemedView>
     );

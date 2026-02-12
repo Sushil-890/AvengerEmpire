@@ -73,7 +73,7 @@ export default function CheckoutScreen() {
                 <ThemedText 
                     className="text-3xl font-bold mb-6 tracking-wide" 
                     style={{ color: colors.neutral.white }}>
-                    Checkout
+                    Avenger Empire
                 </ThemedText>
 
                 {/* Shipping Address Section */}
