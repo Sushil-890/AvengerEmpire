@@ -56,19 +56,27 @@ router.post('/verify', async (req, res) => {
                 await order.save();
                 console.log('✅ Order payment status updated successfully');
 
-                res.json({
+                return res.json({
                     message: "Payment Verified",
                     success: true
                 });
             } else {
                 console.error('❌ Order not found:', orderId);
-                res.status(404);
-                throw new Error('Order not found regarding this payment');
+                return res.status(404).json({
+                    message: 'Order not found regarding this payment',
+                    success: false
+                });
             }
         } else {
             console.error('❌ Invalid payment signature');
-            res.status(400);
-            throw new Error('Invalid signature');
+            // Log the signatures for debugging (be careful in prod logs, but helpful here)
+            console.log('Expected:', expectedSignature);
+            console.log('Received:', razorpay_signature);
+
+            return res.status(400).json({
+                message: 'Invalid signature',
+                success: false
+            });
         }
     } catch (error) {
         console.error('Payment verification error:', error);
@@ -85,14 +93,14 @@ router.post('/verify', async (req, res) => {
 router.get('/:orderId', async (req, res) => {
     try {
         const orderId = req.params.orderId;
-        
+
         // Comprehensive logging
         console.log('🔍 Payment page request received:');
         console.log('  Full URL:', req.originalUrl);
         console.log('  Route params:', req.params);
         console.log('  Query params:', req.query);
         console.log('  orderId from params:', orderId);
-        
+
         // Validate orderId format
         if (!orderId || orderId === ':orderId') {
             console.error('❌ Invalid orderId parameter:', orderId);
@@ -107,7 +115,7 @@ router.get('/:orderId', async (req, res) => {
                 </html>
             `);
         }
-        
+
         // Check if orderId is a valid MongoDB ObjectId format (24 hex characters)
         if (!/^[0-9a-fA-F]{24}$/.test(orderId)) {
             console.error('❌ Invalid ObjectId format:', orderId);
@@ -122,9 +130,9 @@ router.get('/:orderId', async (req, res) => {
                 </html>
             `);
         }
-        
+
         console.log('✅ OrderId validation passed');
-        
+
         const order = await Order.findById(orderId);
         if (!order) {
             console.error('❌ Order not found in database:', orderId);
@@ -138,7 +146,7 @@ router.get('/:orderId', async (req, res) => {
                 </html>
             `);
         }
-        
+
         console.log('✅ Order found successfully');
 
         // Determine redirect URL based on client type (from query param or user agent)
@@ -251,6 +259,10 @@ router.get('/:orderId', async (req, res) => {
                     display: none;
                     color: #dc2626;
                     margin-top: 20px;
+                    padding: 10px;
+                    background-color: #fef2f2;
+                    border-radius: 8px;
+                    font-size: 14px;
                 }
                 .close-button {
                     display: none;
@@ -293,6 +305,11 @@ router.get('/:orderId', async (req, res) => {
                     Pay ₹${order.totalPrice}
                 </button>
                 
+                <!-- Test button for debugging -->
+                <button class="pay-button" style="background: #059669; margin-top: 10px; font-size: 14px; padding: 10px;" onclick="testRedirect()">
+                    🧪 Test Redirect (Debug Only)
+                </button>
+                
                 <div class="loading" id="loading">Processing payment...</div>
                 <div class="success" id="success">
                     Payment successful! 
@@ -301,7 +318,7 @@ router.get('/:orderId', async (req, res) => {
                 <button class="close-button" id="closeButton" onclick="window.close()">
                     Close Window
                 </button>
-                <div class="error" id="error">Payment failed. Please try again.</div>
+                <div class="error" id="error"></div>
             </div>
 
             <script>
@@ -315,12 +332,19 @@ router.get('/:orderId', async (req, res) => {
                 console.log('  MOBILE_SCHEME:', MOBILE_SCHEME);
                 console.log('  WEB_URL:', WEB_URL);
                 console.log('  ORDER_ID:', ORDER_ID);
+                
+                // Test function to check if redirect works
+                function testRedirect() {
+                    console.log('🧪 Testing redirect...');
+                    handleSuccessRedirect();
+                }
 
                 function startPayment() {
                     const payButton = document.getElementById('payButton');
                     payButton.disabled = true;
                     payButton.style.display = 'none';
                     document.getElementById('loading').style.display = 'block';
+                    document.getElementById('error').style.display = 'none';
 
                     var options = {
                         "key": "${process.env.RAZORPAY_KEY_ID}",
@@ -333,15 +357,9 @@ router.get('/:orderId', async (req, res) => {
                             // Payment successful
                             console.log('🎉 Razorpay payment successful:', response);
                             document.getElementById('loading').style.display = 'none';
-                            document.getElementById('success').style.display = 'block';
                             
                             // Verify payment on server
                             console.log('🔄 Starting payment verification...');
-                            console.log('📋 Verification data:', {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                orderId: ORDER_ID
-                            });
                             
                             fetch('/api/payment/verify', {
                                 method: 'POST',
@@ -355,32 +373,32 @@ router.get('/:orderId', async (req, res) => {
                                     orderId: ORDER_ID
                                 })
 
-                            }).then(res => {
+                            }).then(async res => {
                                 console.log('📡 Verification response status:', res.status);
+                                const data = await res.json();
+                                
                                 if (!res.ok) {
-                                    throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+                                    throw new Error(data.message || 'Payment verification failed');
                                 }
-                                return res.json();
+                                return data;
                             }).then(data => {
                                 console.log('💳 Payment verification response:', data);
                                 if (data.success) {
                                     console.log('✅ Payment verified successfully');
+                                    document.getElementById('success').style.display = 'block';
+                                    
                                     // Wait a bit longer before redirect to ensure database is updated
                                     setTimeout(() => {
                                         handleSuccessRedirect();
-                                    }, 1500); // Increased delay
+                                    }, 1500);
                                 } else {
-                                    console.error('❌ Payment verification failed:', data);
-                                    document.getElementById('success').style.display = 'none';
-                                    document.getElementById('error').style.display = 'block';
-                                    payButton.disabled = false;
-                                    payButton.style.display = 'block';
+                                    throw new Error(data.message || 'Payment verification returned failure');
                                 }
                             }).catch(err => {
                                 console.error('❌ Payment verification error:', err);
-                                console.error('Error details:', err.message);
                                 document.getElementById('success').style.display = 'none';
                                 document.getElementById('error').style.display = 'block';
+                                document.getElementById('error').innerHTML = '<strong>Payment Failed</strong><br>' + err.message;
                                 payButton.disabled = false;
                                 payButton.style.display = 'block';
                             });
@@ -428,8 +446,6 @@ router.get('/:orderId', async (req, res) => {
                             try {
                                 console.log('✅ Attempting window.location redirect');
                                 window.location.href = mobileUrl;
-                                // Also try replace as alternative
-                                window.location.replace(mobileUrl);
                             } catch (error) {
                                 console.error('❌ window.location redirect failed:', error);
                             }
