@@ -14,37 +14,58 @@ connectDB();
 const app = express();
 
 // CORS configuration for separate frontend/backend deployments
-const allowedOrigins = process.env.FRONTEND_URL 
-    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-    : ['http://localhost:5173', 'http://localhost:3000'];
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://avengerempires.onrender.com' // Explicitly allow backend domain
+];
+
+// Add FRONTEND_URL if it exists
+if (process.env.FRONTEND_URL) {
+    process.env.FRONTEND_URL.split(',').forEach(url => {
+        const trimmed = url.trim();
+        if (trimmed && !allowedOrigins.includes(trimmed)) allowedOrigins.push(trimmed);
+    });
+}
+
+// Add WEB_APP_URL if it exists (often same as backend)
+if (process.env.WEB_APP_URL) {
+    const webUrl = process.env.WEB_APP_URL.trim();
+    if (webUrl && !allowedOrigins.includes(webUrl)) allowedOrigins.push(webUrl);
+}
+
+// Add Render's automatic URL if available
+if (process.env.RENDER_EXTERNAL_URL) {
+    const renderUrl = process.env.RENDER_EXTERNAL_URL.trim();
+    if (renderUrl && !allowedOrigins.includes(renderUrl)) allowedOrigins.push(renderUrl);
+}
+
+console.log('✅ Allowed CORS Origins:', allowedOrigins);
 
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        
+
         // In development, allow any localhost or local IP requests for testing
         if (process.env.NODE_ENV === 'development') {
             if (origin.includes('localhost') || origin.includes('192.168.') || origin.includes('127.0.0.1')) {
                 return callback(null, true);
             }
         }
-        
+
         // Check if origin is in allowed list
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            // In development, log rejected origins for debugging
-            if (process.env.NODE_ENV !== 'production') {
-                console.warn(`⚠️  CORS: Rejected origin: ${origin}`);
-                console.warn(`   Allowed origins: ${allowedOrigins.join(', ')}`);
-            }
+            console.error(`⚠️  CORS Blocked: Origin '${origin}' not in allowed list.`);
+            console.error(`   Allowed: ${allowedOrigins.join(', ')}`);
             callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-razorpay-signature'],
     exposedHeaders: ['Content-Length', 'Content-Type']
 };
 
