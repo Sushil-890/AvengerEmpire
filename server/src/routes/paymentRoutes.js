@@ -84,10 +84,62 @@ router.post('/verify', async (req, res) => {
 // @access  Public (but requires valid order)
 router.get('/:orderId', async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId);
-        if (!order) {
-            return res.status(404).send('Order not found');
+        const orderId = req.params.orderId;
+        
+        // Comprehensive logging
+        console.log('🔍 Payment page request received:');
+        console.log('  Full URL:', req.originalUrl);
+        console.log('  Route params:', req.params);
+        console.log('  Query params:', req.query);
+        console.log('  orderId from params:', orderId);
+        
+        // Validate orderId format
+        if (!orderId || orderId === ':orderId') {
+            console.error('❌ Invalid orderId parameter:', orderId);
+            return res.status(400).send(`
+                <html>
+                    <body style="font-family: Arial; padding: 40px; text-align: center;">
+                        <h1>❌ Invalid Order ID</h1>
+                        <p>The order ID parameter is missing or invalid.</p>
+                        <p>Received: ${orderId}</p>
+                        <button onclick="window.close()">Close</button>
+                    </body>
+                </html>
+            `);
         }
+        
+        // Check if orderId is a valid MongoDB ObjectId format (24 hex characters)
+        if (!/^[0-9a-fA-F]{24}$/.test(orderId)) {
+            console.error('❌ Invalid ObjectId format:', orderId);
+            return res.status(400).send(`
+                <html>
+                    <body style="font-family: Arial; padding: 40px; text-align: center;">
+                        <h1>❌ Invalid Order ID Format</h1>
+                        <p>The order ID must be a 24-character hexadecimal string.</p>
+                        <p>Received: ${orderId} (${orderId.length} characters)</p>
+                        <button onclick="window.close()">Close</button>
+                    </body>
+                </html>
+            `);
+        }
+        
+        console.log('✅ OrderId validation passed');
+        
+        const order = await Order.findById(orderId);
+        if (!order) {
+            console.error('❌ Order not found in database:', orderId);
+            return res.status(404).send(`
+                <html>
+                    <body style="font-family: Arial; padding: 40px; text-align: center;">
+                        <h1>❌ Order Not Found</h1>
+                        <p>No order exists with ID: ${orderId}</p>
+                        <button onclick="window.close()">Close</button>
+                    </body>
+                </html>
+            `);
+        }
+        
+        console.log('✅ Order found successfully');
 
         // Determine redirect URL based on client type (from query param or user agent)
         const clientType = req.query.client || 'web'; // 'web' or 'mobile'
