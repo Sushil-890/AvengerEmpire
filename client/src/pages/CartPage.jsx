@@ -112,7 +112,7 @@ const CartPage = () => {
                                 <img src={getImageUrl(item.image)} alt={item.name} />
                                 <div className="item-details">
                                     <Link to={`/product/${item.product}`}>{item.name}</Link>
-                                    <span className="price">${item.price}</span>
+                                    <span className="price">₹{item.price}</span>
                                 </div>
                                 <button
                                     className="remove-btn"
@@ -126,7 +126,7 @@ const CartPage = () => {
                     <div className="cart-summary">
                         <h3>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items</h3>
                         <p className="total-price">
-                            ${cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)}
+                            ₹{cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)}
                         </p>
                         <button
                             className="btn btn-block"

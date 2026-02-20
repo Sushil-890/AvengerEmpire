@@ -113,5 +113,49 @@
 @media (max-width: 900px) {
     .product-layout {
         grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .product-info-panel h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-details-page {
+        padding: 30px 15px;
+    }
+
+    .product-info-panel h1 {
+        font-size: 1.5rem;
+    }
+
+    .brand-title {
+        font-size: 0.9rem;
+    }
+
+    .price-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .price-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .image-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .trust-features {
+        padding-top: 20px;
+    }
+
+    .feature {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
     }
 }

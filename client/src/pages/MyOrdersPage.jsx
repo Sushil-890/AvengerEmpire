@@ -66,7 +66,7 @@ const MyOrdersPage = () => {
                                         <tr key={order._id}>
                                             <td className="order-id">#{order._id.substring(0, 10)}</td>
                                             <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                                            <td className="price">${order.totalPrice.toFixed(2)}</td>
+                                            <td className="price">₹{order.totalPrice.toFixed(2)}</td>
                                             <td>
                                                 <span className={`status-badge ${order.isPaid ? 'success' : 'danger'}`}>
                                                     {order.isPaid ? 'Paid' : 'Pending'}

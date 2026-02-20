@@ -55,9 +55,9 @@ const Footer = () => {
                     <div className="footer-section">
                         <h4>Contact Us</h4>
                         <ul className="footer-links">
-                            <li><a><FaEnvelope /> support@imperial.com</a></li>
-                            <li><a><FaPhoneAlt /> +91 1800-ROYAL-MART</a></li>
-                            <li><a><FaMapMarkerAlt /> 1 Empire Way, Royal Colony</a></li>
+                            <li><a href="mailto:kumrsushil890@gmail.com"><FaEnvelope /> kumrsushil890@gmail.com</a></li>
+                            <li><a href="tel:+919198788"><FaPhoneAlt /> +91 9198788XXXX</a></li>
+                            <li><a><FaMapMarkerAlt /> 234, Mandi Gobindgarh, 147301</a></li>
                         </ul>
                     </div>
                 </div>

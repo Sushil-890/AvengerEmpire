@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
                     <h5 className="brand">{product.brand} • {product.model}</h5>
                     <p className="colorway">{product.colorway}</p>
                     <div className="price-row">
-                        <span className="price">${product.price}</span>
+                        <span className="price">₹{product.price}</span>
                         <span className="size">US {product.size}</span>
                     </div>
                 </div>

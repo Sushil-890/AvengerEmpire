@@ -57,7 +57,7 @@ const ProductDetailsPage = () => {
                     <p className="product-colorway">{product.colorway}</p>
 
                     <div className="price-section">
-                        <h2>${product.price}</h2>
+                        <h2>₹{product.price}</h2>
                         {product.isVerified && (
                             <span className="verified-badge"><FaCheckCircle /> Authenticity Verified</span>
                         )}

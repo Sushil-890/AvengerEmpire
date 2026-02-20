@@ -34,7 +34,7 @@ const OrderPage = () => {
                             <img src={getImageUrl(item.image)} alt={item.name} />
                             <div>
                                 <h4>{item.name}</h4>
-                                <p>${item.price}</p>
+                                <p>₹{item.price}</p>
                             </div>
                         </div>
                     ))}
@@ -42,11 +42,11 @@ const OrderPage = () => {
                     <div className="order-totals">
                         <div className="row">
                             <span>Shipping</span>
-                            <span>${order.shippingPrice}</span>
+                            <span>₹{order.shippingPrice}</span>
                         </div>
                         <div className="row total">
                             <span>Total</span>
-                            <span>${order.totalPrice}</span>
+                            <span>₹{order.totalPrice}</span>
                         </div>
                     </div>
                 </div>

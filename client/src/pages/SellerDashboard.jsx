@@ -238,7 +238,7 @@ const SellerDashboard = () => {
                                                 <div style={{ fontWeight: '600' }}>{product.model}</div>
                                                 <small style={{ color: 'var(--text-muted)' }}>{product.condition}</small>
                                             </td>
-                                            <td style={{ fontWeight: '700' }}>${product.price}</td>
+                                            <td style={{ fontWeight: '700' }}>₹{product.price}</td>
                                             <td>
                                                 <span className={`status-badge info`}>{product.status}</span>
                                             </td>

@@ -60,7 +60,49 @@
         gap: 20px;
     }
 
-    .logout-btn {
+    .courier-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .courier-header button {
         width: 100%;
+    }
+
+    .courier-dashboard {
+        padding: 30px 15px;
+    }
+
+    .shipment-table-container {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .orders-table {
+        font-size: 0.75rem;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        padding: 8px 5px;
+    }
+
+    .awb-cell {
+        font-size: 0.7rem;
+    }
+
+    .order-ref-cell {
+        font-size: 0.7rem;
+    }
+
+    .orders-table td > div {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .orders-table td button {
+        font-size: 0.65rem;
+        padding: 4px 6px;
+        white-space: nowrap;
     }
 }

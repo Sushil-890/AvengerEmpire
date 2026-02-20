@@ -72,7 +72,7 @@ const AdminDashboardPage = () => {
                                         </div>
                                     </td>
                                     <td>{product.seller?.name || 'Seller'}</td>
-                                    <td style={{ fontWeight: '700' }}>${product.price}</td>
+                                    <td style={{ fontWeight: '700' }}>₹{product.price}</td>
                                     <td><span className="status-badge warning">Pending</span></td>
                                     <td>
                                         <button
@@ -111,7 +111,7 @@ const AdminDashboardPage = () => {
                                 <tr key={product._id}>
                                     <td style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>#{product._id.substring(0, 10)}</td>
                                     <td style={{ fontWeight: '600' }}>{product.model}</td>
-                                    <td style={{ fontWeight: '700' }}>${product.price}</td>
+                                    <td style={{ fontWeight: '700' }}>₹{product.price}</td>
                                     <td><span className="status-badge success">Verified</span></td>
                                 </tr>
                             ))}

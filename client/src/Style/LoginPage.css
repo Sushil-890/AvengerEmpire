@@ -61,3 +61,19 @@
     font-weight: 600;
     text-decoration: underline;
 }
+
+@media (max-width: 600px) {
+    .login-container {
+        padding: 20px;
+        height: auto;
+        min-height: 80vh;
+    }
+
+    .login-form {
+        padding: 30px 20px;
+    }
+
+    .login-form h1 {
+        font-size: 1.8rem;
+    }
+}

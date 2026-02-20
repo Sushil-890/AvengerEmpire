@@ -176,10 +176,49 @@
 
     .dashboard-tabs {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .tab-btn {
         padding: 10px 15px;
         font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .seller-dashboard {
+        padding: 30px 15px;
+    }
+
+    .listing-form-container {
+        padding: 20px 15px;
+    }
+
+    .dashboard-actions {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .orders-table {
+        font-size: 0.8rem;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        padding: 10px 8px;
+    }
+
+    .orders-table td > div {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .orders-table td button {
+        font-size: 0.7rem;
+        padding: 4px 8px;
     }
 }

@@ -56,3 +56,17 @@
     width: 100%;
     margin-top: 10px;
 }
+
+@media (max-width: 600px) {
+    .courier-login-container {
+        padding: 15px;
+    }
+
+    .courier-login-card {
+        padding: 30px 20px;
+    }
+
+    .courier-login-card h2 {
+        font-size: 1.5rem;
+    }
+}
